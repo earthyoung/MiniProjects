@@ -1,31 +1,13 @@
-import dao.StudentDao;
-import dto.StudentDto;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import service.StudentService;
 
 public class MainApplication {
 
     public static void main(String[] args) {
 
+        StudentService studentService = new StudentService();
 
+        studentService.run();
 
     }
-
-    /*
-        try{
-            StudentDao studentDao = new StudentDao();
-            List<StudentDto> students = new ArrayList<StudentDto>();
-
-            students = studentDao.takeOut();
-
-            for(StudentDto stud : students){
-                System.out.println(stud);
-            }
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-     */
 
 }
