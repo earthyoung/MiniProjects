@@ -1,6 +1,7 @@
 package service;
 
 import dao.StudentDao;
+import dto.DepartmentDto;
 import dto.StudentDto;
 
 import java.sql.SQLException;
@@ -12,7 +13,9 @@ public class StudentService {
 
     StudentDao studentDao = new StudentDao();
     StudentDto studentDto = new StudentDto();
+    DepartmentDto departmentDto = new DepartmentDto();
     List<StudentDto> students = new ArrayList<>();
+    List<DepartmentDto> departments = new ArrayList<>();
     Scanner scanner = new Scanner(System.in);
 
     private static String[] choices = {
@@ -36,6 +39,9 @@ public class StudentService {
                 case 1:
                     showAllStudents();
                     break;
+                case 2:
+                    showAllDepartments();
+                    break;
                 case 3:
                     addNewStudent();
                     break;
@@ -55,7 +61,17 @@ public class StudentService {
 
     private void showAllStudents(){
         try{
-            studentDao.takeOut();
+            students = studentDao.searchAllStudent();
+            System.out.println(students);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void showAllDepartments(){
+        try{
+            departments = studentDao.showAllDepartments();
+            System.out.println(departments);
         }catch(SQLException e){
             e.printStackTrace();
         }
@@ -66,23 +82,18 @@ public class StudentService {
             System.out.println("===============추가하려는 학생의 정보를 입력해주세요===============");
             System.out.print("---------------학번 : ");
             int studentId = scanner.nextInt();
-            System.out.println();
             studentDto.setStudentId(studentId);
             System.out.print("---------------이름 : ");
             String name = scanner.next();
-            System.out.println();
             studentDto.setName(name);
             System.out.print("---------------성적 : ");
             String grade = scanner.next();
-            System.out.println();
             studentDto.setGrade(grade);
             System.out.print("---------------학과 번호 : ");
             int departmentId = scanner.nextInt();
-            System.out.println();
             studentDto.setDepartmentId(departmentId);
             System.out.print("---------------등록 여부 [YES/NO/EXCHANGE] : ");
             String registered = scanner.next();
-            System.out.println();
             studentDto.setRegistered(registered);
 
             studentDao.addStudent(studentDto);
