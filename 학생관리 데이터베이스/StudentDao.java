@@ -1,5 +1,6 @@
 package dao;
 
+import dto.DepartmentDto;
 import dto.StudentDto;
 
 import java.sql.*;
@@ -50,6 +51,12 @@ public class StudentDao {
                 cleanUp(conn, ps, "students");
             }
         }
+        ps.setInt(1, studentDto.getStudentId());
+        ps.setString(2, studentDto.getName());
+        ps.setString(3, studentDto.getGrade());
+        ps.setInt(4, studentDto.getDepartmentId());
+        ps.setString(5, studentDto.getRegistered());
+
         ps.executeUpdate();
         conn.close();
     }
@@ -125,6 +132,33 @@ public class StudentDao {
         conn.close();
 
         return student;
+    }
+
+    public List<DepartmentDto> showAllDepartments() throws SQLException {
+        List<DepartmentDto> departments = new ArrayList<>();
+
+        Connection conn = DriverManager.getConnection(
+          "jdbc:mysql://localhost:3307/example",
+          "root",
+          "earthyoung"
+        );
+
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM department");
+
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()){
+            int departmentId = rs.getInt("department_id");
+            String departmentName = rs.getString("name");
+            String description = rs.getString("description");
+            String officialEmail = rs.getString("official_email");
+            String division = rs.getString("division");
+            int capacity = rs.getInt("capacity");
+
+            departments.add(new DepartmentDto(departmentId, departmentName, description, officialEmail, division, capacity));
+        }
+        conn.close();
+
+        return departments;
     }
 
     private byte[] encoding(String str){
